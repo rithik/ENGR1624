@@ -54,8 +54,6 @@ def isDistracted(frame,drawing = True):
             flag = 0
             return False
 
-
-
 ap = argparse.ArgumentParser()
 ap.add_argument("-p", "--picamera", type=arg_conv, default=False,
 	help="whether or not the Raspberry Pi camera should be used")
@@ -94,7 +92,6 @@ for i in range (p.get_device_count()):
 	print((i,dev['name'],dev['maxInputChannels']))
 """
 
-
 def play_sound(frequency=440, duration=0.2, volume=1):
     n_samples = int(22050 * duration)
     restframes = n_samples % 22050
@@ -109,8 +106,6 @@ def eye_aspect_ratio(eye):
 	ear = (A + B) / (2.0 * C)
 	return ear
 
-
-
 thresh = 0.25
 frame_check = 20
 detect = dlib.get_frontal_face_detector()
@@ -120,7 +115,6 @@ eyesNotVisible = 0
 
 (lStart, lEnd) = face_utils.FACIAL_LANDMARKS_68_IDXS["left_eye"]
 (rStart, rEnd) = face_utils.FACIAL_LANDMARKS_68_IDXS["right_eye"]
-
 
 VideoStream = None
 if args['picamera']:

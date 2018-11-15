@@ -5,7 +5,6 @@ import argparse
 proc = None
 moving = True
 
-
 def arg_conv(str):
     if str.lower() in ('yes', 'true', 't', 'y', '1'):
         return True
