@@ -6,6 +6,7 @@ class WebCamVideoStream:
 
 	def getFrame(self):
 		ret,frame = self.cap.read()
+                e)
 		return frame
 
 	def reset(self):
