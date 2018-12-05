@@ -1,4 +1,5 @@
 import smbus
+import math
 
 class mpu6050:
 
@@ -130,9 +131,11 @@ class mpu6050:
             z = z * self.GRAVITIY_MS2
             return {'x': x, 'y': y, 'z': z}
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
+def run():
     mpu = mpu6050(0x68)
     accel_data = mpu.get_accel_data()
-    print(accel_data['x'])
-    print(accel_data['y'])
-    print(accel_data['z'])
+    #print(accel_data['x'])
+    #print(accel_data['y'])
+    #print(accel_data['z'])
+    return math.sqrt(math.pow(accel_data['x'], 2) + math.pow(accel_data['y'], 2) + math.pow(accel_data['z'], 2))

@@ -5,6 +5,8 @@ from imutils import face_utils
 import time
 import datetime
 import math
+#from SoundDriver import SoundDriver
+#SoundDriver = SoundDriver()
 
 FRAMES = 10
 t1 = datetime.datetime.now()
@@ -68,6 +70,11 @@ class Detector():
             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
         cv2.putText(frame, "****************DISTRACTED!****************", (10,325),
             cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
+    def display_moving(self, frame):
+        cv2.putText(frame, "Moving", (10, 80),
+            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+
 
     def show(self, frame):
         cv2.imshow("Frame", frame)
