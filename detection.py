@@ -4,7 +4,8 @@ import argparse
 import time
 import datetime
 import cv2
-
+import accelerometer
+from pyaudio import PyAudio
 from detector import Detector
 from SoundDriver import SoundDriver
 
@@ -24,6 +25,10 @@ ap.add_argument("-b", "--debug", default=False,action="store_true",
 
 ap.add_argument("-s", "--sound", default=False,action="store_true",
     help="whether or not sound is active")
+
+ap.add_argument("-c", "--accelerometer", default=False,action="store_true",
+    help="whether or not accelerometer code is running")
+
 args = vars(ap.parse_args())
 
 if args["sound"]:
@@ -32,6 +37,8 @@ if args["sound"]:
 detector = Detector()
 frameRate = 0
 initial_time = datetime.datetime.now()
+start_time = time.time()
+MOVING = True
 
 VideoStream = None
 if args['picamera']:
@@ -44,20 +51,39 @@ else:
 
 
 while True:
+    curr_time = time.time()
+    threshold = 5 if MOVING else 3
+
+    frame_time = (datetime.datetime.now() - initial_time).total_seconds()
+    if args["analytics"]:
+        print(1/frame_time)
+
+    initial_time = datetime.datetime.now()
+
+
+    if args["accelerometer"]:
+        if((curr_time - start_time) // threshold > 1):
+            accel_data = accelerometer.run()
+            if accel_data > 13:
+                MOVING = True
+            else:
+                MOVING = False
+
     frame = VideoStream.getFrame()
     frameRate+=1
-    time = (datetime.datetime.now() - initial_time).total_seconds()
-    if args["analytics"]:
-        print(frameRate/time)
+
     frame = imutils.resize(frame, width=450)
-    distracted= detector.isDistracted(frame,args["display"])
 
-    if distracted:
-        if args["sound"]:
-            SoundDriver.play_sound()
-        if args["display"]:
-            detector.display_warnings(frame)
+    if MOVING or not args["accelerometer"]: 
+        distracted= detector.isDistracted(frame,args["display"])
+        if distracted:
+            if args["sound"]:
+                SoundDriver.play_sound()
+            if args["display"]:
+                detector.display_warnings(frame)
 
+    if (args["display"] and MOVING):
+        detector.display_moving(frame)
     if (args["display"]):
         detector.show(frame)
 
@@ -67,5 +93,6 @@ while True:
     if key == ord("q"):
     	break
 
+SoundDriver.stream.stop_stream()
 VideoStream.close()
 cv2.destroyAllWindows()
