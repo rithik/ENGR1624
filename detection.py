@@ -71,6 +71,7 @@ while True:
 
     frame = VideoStream.getFrame()
     frameRate+=1
+
     frame = imutils.resize(frame, width=450)
 
     if MOVING or not args["accelerometer"]: 
