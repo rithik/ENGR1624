@@ -61,9 +61,9 @@ class Detector():
                 self.flag+=1
                	if self.flag>=self.frame_check:
                     return True
-                else:
-                    self.flag=0
-                    return False
+            else:
+                 self.flag=0
+                 return False
 
     def display_warnings(self, frame):
         cv2.putText(frame, "****************DISTRACTED!****************", (10, 30),
